@@ -1,0 +1,28 @@
+:root {
+    --bg-color-1: rgb(68, 68, 68);
+    --bg-color-2: rgb(102, 102, 102);
+    --warm: rgb(255, 244, 210);
+    --cold: rgb(167, 242, 255);
+    /* --tooltip: rgb(189, 92, 53); */
+}
+
+body {
+    height: 100vh;
+    width: 100vw;
+    background: radial-gradient( var(--bg-color-1), var(--bg-color-2));
+    color: rgb(56, 54, 54);
+    margin: 0;
+    font-family: Roboto, sans-serif;
+}
+
+.svgWrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+svg {
+    background: linear-gradient(150deg, var(--warm) 20%, var(--cold));
+}

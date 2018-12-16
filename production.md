@@ -27,3 +27,6 @@ API example:
       "month": 1,
       "variance": -1.366
     }
+
+ISSUES:
+border highlihgt is not working on mouseover

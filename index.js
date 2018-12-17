@@ -198,7 +198,7 @@ function makeMap(data) {
     .attr("x", svgStyles.w / 2)
     .attr("y", chartStyles.margin.top / 2 + 20)
     .attr("text-anchor", "middle")
-    .attr("id", "subtitle")
+    .attr("id", "description")
     .style("font-size", "16px")
     .text(`${minYear} - ${maxYear}: base temperature ${data.baseTemperature}℃`);
 
@@ -284,10 +284,10 @@ function makeMap(data) {
     .data(monthlyVariance)
     .enter()
     .append("rect")
-    .attr("class", "bar")
+    .attr("class", "cell")
     .attr("data-year", d => d.year)
-    .attr("data-month", d => d.month)
-    .attr("data-variance", d => d.variance)
+    .attr("data-month", d => d.month - 1)
+    .attr("data-temp", d => data.baseTemperature+d.variance)
     .attr("x", d => xScale(new Date().setFullYear(d.year - 1)) + 1)
     .attr(
       "y",
@@ -306,6 +306,7 @@ function makeMap(data) {
     .on("mouseover", function(d) {
       d3.select(this).style("stroke", "black");
       tooltip
+        .attr('data-year', d.year)
         .style("opacity", 0.8)
         .html(
           `${d.year} - ${getMonthName(d.month)}<br/>${(
@@ -332,4 +333,45 @@ function makeMap(data) {
       d3.select(this).style("stroke", "none");
       tooltip.style("opacity", 0);
     });
+}
+
+/*
+@param min {Number} minimum value of range
+@param max {Number} maximum value of range
+@param n {Integer} number of elements in array
+
+returns an array with first value = min, last value = max, and number of items = n
+*/
+function arrayFromRange(min, max, n) {
+  let arr = [];
+  let difference = (max - min) / n;
+
+  for (let i = 0; i <= n; i++) {
+    arr.push(Number((min + difference * i).toFixed(4)));
+  }
+
+  return arr;
+}
+
+function getMonthName(month) {
+  const months = getMonths();
+
+  return months[month - 1];
+}
+
+function getMonths() {
+  return [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+  ];
 }

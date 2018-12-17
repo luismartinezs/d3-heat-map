@@ -10,23 +10,33 @@ function arrayFromRange(min, max, n) {
   let difference = (max - min) / n;
 
   for (let i = 0; i <= n; i++) {
-    arr.push(Number( (min + difference * i ).toFixed(4) ));
+    arr.push(Number((min + difference * i).toFixed(4)));
   }
 
   return arr;
 }
 
-
 function getMonthName(month) {
+  const months = getMonths();
 
-    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-    return months[month-1];
-
+  return months[month - 1];
 }
 
 function getMonths() {
-    return ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  return [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+  ];
 }
 
 module.exports = arrayFromRange;

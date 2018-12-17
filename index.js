@@ -14,7 +14,6 @@ req.send();
 const yearFormat = d3.timeFormat("%Y");
 var monthFormat = d3.timeFormat("%B");
 
-
 // Styles //
 const chartStyles = {
   margin: {
@@ -26,7 +25,7 @@ const chartStyles = {
 };
 
 const svgStyles = {
-  w: 1200,
+  w: 1250,
   h: 600,
   margin: {
     top: 20,
@@ -172,17 +171,19 @@ function makeMap(data) {
     // .domain([new Date().setFullYear(2000, 11, 5), new Date().setFullYear(2001, 11, 14)]);
     .domain([new Date().setMonth(0, 1), new Date().setMonth(11, 31)]);
 
-    const yAxisScale = d3
+  const yAxisScale = d3
     .scaleTime()
     .range([0, chartStyles.h])
-    .domain([new Date().setFullYear(2000, 11, 15), new Date().setFullYear(2001, 11, 14)]);
-
+    .domain([
+      new Date().setFullYear(2000, 11, 15),
+      new Date().setFullYear(2001, 11, 14)
+    ]);
 
   const yAxis = d3
-  .axisLeft()
-  .scale(yAxisScale)
-  .tickFormat(monthFormat)
-  .tickArguments([d3.timeMonth.every(1)]);
+    .axisLeft()
+    .scale(yAxisScale)
+    .tickFormat(monthFormat)
+    .tickArguments([d3.timeMonth.every(1)]);
 
   // create Y axis
   chart

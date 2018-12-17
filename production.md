@@ -29,8 +29,10 @@ API example:
     }
 
 ISSUES:
-border highlihgt is not working on mouseover
-Month ticks are not centered
+
+Month ticks are not centered OK
 January is not on display
-Rectangles are not vertically positioned
-Legend ticks are not right
+
+take colorScale temp values and generate it from arrayFromRange
+
+Tick 9.5 from scale appears with a box offset > problem with low accuracy on function arrayFromRange DONE

@@ -3,7 +3,7 @@
     --bg-color-2: rgb(102, 102, 102);
     --warm: rgb(255, 244, 210);
     --cold: rgb(167, 242, 255);
-    /* --tooltip: rgb(189, 92, 53); */
+    --tooltip: black;
 }
 
 body {
@@ -26,3 +26,25 @@ body {
 svg {
     background: linear-gradient(150deg, var(--warm) 20%, var(--cold));
 }
+
+.bar {
+    stroke: none;
+}
+
+.bar:hover {
+    stroke: 1px solid black;
+}
+
+.tooltip {
+    text-align: center;
+    position: absolute;
+    z-index: 1;
+    padding: 5px;
+    font: 12px "Roboto";
+    color: white;
+    background: var(--tooltip);
+    border: 0px;
+    border-radius: 5px;
+    pointer-events: none;
+    max-width: 150,
+  }

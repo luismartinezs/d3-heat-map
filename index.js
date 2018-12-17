@@ -238,7 +238,7 @@ function makeMap(data) {
     .tickFormat(d3.format(".1f"))
     .tickValues(ticksArray.slice(1, this.length - 1));
 
-  chart
+  const legend = chart
     .append("g")
     .attr("id", "legend")
     .attr(
@@ -248,17 +248,14 @@ function makeMap(data) {
     .call(legendAxis);
 
   // add legend color boxes
-  chart
+  legend
     .selectAll()
     .data(ticksArray.slice(0, this.length - 1))
     .enter()
     .append("rect")
     .attr("class", "legendItem")
     .attr("x", d => legendScale(d) + 0.5)
-    .attr(
-      "y",
-      chartStyles.h + chartStyles.margin.bottom / 2 - legendStyles.box.height
-    )
+    .attr("y", -legendStyles.box.height)
     .attr("width", legendStyles.box.width)
     .attr("height", legendStyles.box.height)
     .attr("fill", (d, index) => {
@@ -287,7 +284,7 @@ function makeMap(data) {
     .attr("class", "cell")
     .attr("data-year", d => d.year)
     .attr("data-month", d => d.month - 1)
-    .attr("data-temp", d => data.baseTemperature+d.variance)
+    .attr("data-temp", d => data.baseTemperature + d.variance)
     .attr("x", d => xScale(new Date().setFullYear(d.year - 1)) + 1)
     .attr(
       "y",
@@ -306,7 +303,7 @@ function makeMap(data) {
     .on("mouseover", function(d) {
       d3.select(this).style("stroke", "black");
       tooltip
-        .attr('data-year', d.year)
+        .attr("data-year", d.year)
         .style("opacity", 0.8)
         .html(
           `${d.year} - ${getMonthName(d.month)}<br/>${(

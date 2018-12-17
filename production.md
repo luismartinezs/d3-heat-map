@@ -30,3 +30,7 @@ API example:
 
 ISSUES:
 border highlihgt is not working on mouseover
+Month ticks are not centered
+January is not on display
+Rectangles are not vertically positioned
+Legend ticks are not right

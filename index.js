@@ -83,6 +83,7 @@ let chart = svg
     `translate(${chartStyles.margin.left}, ${chartStyles.margin.top})`
   );
 
+
 function makeMap(data) {
   let { monthlyVariance } = data;
 
@@ -90,11 +91,56 @@ function makeMap(data) {
   let maxYear = d3.max(monthlyVariance, d => d.year);
 
   let variance = {};
-  
+
   variance.min = d3.min(monthlyVariance, d => d.variance);
   variance.max = d3.max(monthlyVariance, d => d.variance);
 
-  console.log(variance);
+  const colorScale = [
+    {
+      color: 'rgb(49, 54, 149)',
+      temp: 0
+    },
+    {
+      color: 'rgb(69, 117, 180)',
+      temp: 2.8
+    },
+    {
+      color: 'rgb(116, 173, 209)',
+      temp: 3.9
+    },
+    {
+      color: 'rgb(171, 217, 233)',
+      temp: 5.0
+    },
+    {
+      color: 'rgb(224, 243, 248)',
+      temp: 6.1
+    },
+    {
+      color: 'rgb(255, 255, 191)',
+      temp: 7.2
+    },
+    {
+      color: 'rgb(254, 224, 144)',
+      temp: 8.3
+    },
+    {
+      color: 'rgb(253, 174, 97)',
+      temp: 9.5
+    },
+    {
+      color: 'rgb(244, 109, 67)',
+      temp: 10.6
+    },
+    {
+      color: 'rgb(215, 48, 39)',
+      temp: 11.7
+    },
+    {
+      color: 'rgb(165, 0, 38)',
+      temp: 12.8
+    },
+  ]
 
   // X AXIS
   const xScale = d3
@@ -116,16 +162,15 @@ function makeMap(data) {
   const yScale = d3
     .scaleTime()
     .range([0, chartStyles.h])
-    .domain([
-      d3.min(monthlyVariance, d => new Date().setMonth(d.month - 1)),
-      d3.max(monthlyVariance, d => new Date().setMonth(d.month - 1))
-    ]);
+    .domain([new Date().setMonth(0, 1), new Date().setMonth(11, 31)]);
+
+  const yAxis = d3.axisLeft().scale(yScale);
 
   // create Y axis
   chart
     .append("g")
     .attr("id", "y-axis")
-    .call(d3.axisLeft(yScale));
+    .call(yAxis);
 
   // define subtitle
   svg
@@ -138,8 +183,23 @@ function makeMap(data) {
     .text(`${minYear} - ${maxYear}: base temperature ${data.baseTemperature}℃`);
 
   const barStyle = {
-    color: "#c4755d",
+    color: "#c4755d"
   };
+
+  // make legend
+  // legend scale
+  const legendScale = d3
+  .scaleLinear()
+  .range([0, chartStyles.w / 3])
+  .domain([variance.min + data.baseTemperature, variance.max + data.baseTemperature])
+
+  const legendAxis = d3.axisBottom().scale(legendScale);
+
+  chart
+  .append('g')
+  .attr('id', 'legend')
+  .attr("transform", `translate(0, ${chartStyles.h + chartStyles.margin.bottom / 2})`)
+  .call(legendAxis);
 
   chart
     .selectAll()
@@ -150,37 +210,43 @@ function makeMap(data) {
     .attr("data-year", d => d.year)
     .attr("data-month", d => d.month)
     .attr("data-variance", d => d.variance)
-    .attr("x", d => xScale(new Date().setFullYear(d.year)))
-    .attr("y", d => yScale(new Date().setMonth(d.month - 1)))
-    .attr("height", chartStyles.h / 12)
-    .attr("fill", barStyle.color)
+    .attr("x", d => xScale(new Date().setFullYear(d.year)) + 1)
+    .attr("y", d => yScale(new Date().setMonth(d.month - 1)) - chartStyles.h / 24 - 2 )
+    .attr("height", chartStyles.h / 12 + 1)
+    .attr("fill", d => {
+      let colorRel = colorScale.filter( elem => elem.temp <= data.baseTemperature + d.variance );
+      // console.log('colorRel:',colorRel, ' d:', d);
+      let color = colorRel[colorRel.length - 1].color;
+      console.log(color);
+      return color;
+    } )
     .attr("width", 5)
-    .style('border', 'none')
+    .style("border", "none")
     .on("mouseover", function(d) {
-        d3.select(this).style("border", "1px solid black")
-    //   tooltip
-    //     .style("opacity", 0.8)
-    //     .html(
-    //       `${d[0].split("-")[0]} Q${Math.ceil(
-    //         d[0].split("-")[1] / 3
-    //       )}<br/>$${d[1].toFixed(1)} Billion`
-    //     )
-    //     .style("left", function() {
-    //       if (
-    //         event.clientX + tooltipStyle.margin.left + tooltipStyle.width <
-    //         document.documentElement.clientWidth
-    //       ) {
-    //         return `${event.clientX + tooltipStyle.margin.left}px`;
-    //       } else {
-    //         return `${event.clientX -
-    //           tooltipStyle.margin.left -
-    //           tooltipStyle.width}px`;
-    //       }
-    //     })
-    //     .attr("data-date", this.dataset.date);
+      d3.select(this).style("border", "1px solid black");
+      //   tooltip
+      //     .style("opacity", 0.8)
+      //     .html(
+      //       `${d[0].split("-")[0]} Q${Math.ceil(
+      //         d[0].split("-")[1] / 3
+      //       )}<br/>$${d[1].toFixed(1)} Billion`
+      //     )
+      //     .style("left", function() {
+      //       if (
+      //         event.clientX + tooltipStyle.margin.left + tooltipStyle.width <
+      //         document.documentElement.clientWidth
+      //       ) {
+      //         return `${event.clientX + tooltipStyle.margin.left}px`;
+      //       } else {
+      //         return `${event.clientX -
+      //           tooltipStyle.margin.left -
+      //           tooltipStyle.width}px`;
+      //       }
+      //     })
+      //     .attr("data-date", this.dataset.date);
     })
     .on("mouseout", function() {
-      d3.select(this).style('border', 'none');
-    //   tooltip.style("opacity", 0);
+      d3.select(this).style("border", "none");
+      //   tooltip.style("opacity", 0);
     });
 }
